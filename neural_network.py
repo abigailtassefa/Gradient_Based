@@ -41,7 +41,7 @@ def backward(X, y_true, z1, a1, y_hat, W2):
 
     return dW1, db1, dW2, db2
 
-def train_nn(X, y, hidden_size=8, lr=0.01, epochs=500):
+def train_nn(X, y, hidden_size=8, lr=0.01, epochs=500, print_every=50, verbose=True):
     W1, b1, W2, b2 = init_params(hidden_size)
     losses = []
 
@@ -49,6 +49,9 @@ def train_nn(X, y, hidden_size=8, lr=0.01, epochs=500):
         z1, a1, y_hat = forward(X, W1, b1, W2, b2)
         loss = mse_loss(y, y_hat)
         losses.append(loss)
+
+        if verbose and epoch % print_every == 0:
+            print(f"[NN, lr={lr}] Epoch {epoch:4d} | Loss: {loss:.4f}")
 
         dW1, db1, dW2, db2 = backward(X, y, z1, a1, y_hat, W2)
 

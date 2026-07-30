@@ -14,7 +14,7 @@ def compute_gradients(X, y_true, y_pred):
     db = (-2 / n) * np.sum(y_true - y_pred)
     return dw, db
 
-def train_linear_regression(X, y, lr=0.01, epochs=500):
+def train_linear_regression(X, y, lr=0.01, epochs=500, print_every=50):
     w, b = 0.0, 0.0
     losses = []
 
@@ -22,6 +22,9 @@ def train_linear_regression(X, y, lr=0.01, epochs=500):
         y_pred = predict(X, w, b)
         loss = mse_loss(y, y_pred)
         losses.append(loss)
+
+        if epoch % print_every == 0:
+            print(f"[Linear Regression] Epoch {epoch:4d} | Loss: {loss:.4f}")
 
         dw, db = compute_gradients(X, y, y_pred)
         w -= lr * dw

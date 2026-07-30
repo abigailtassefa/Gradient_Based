@@ -9,12 +9,19 @@ import neural_network as nn_model
 w, b, lin_losses = lr_model.train_linear_regression(X_lin, y_lin, lr=0.01, epochs=500)
 print(f"Linear Regression -> w: {w:.3f}, b: {b:.3f}")
 
-# ---------- Train NN with 3 learning rates ----------
+# ---------- Train NN with default learning rate (standalone loss curve) ----------
+W1, b1, W2, b2, nn_losses_default = nn_model.train_nn(
+    X_nn_norm, y_nn, hidden_size=8, lr=0.01, epochs=500, verbose=True
+)
+
+# ---------- Train NN with 3 learning rates for comparison ----------
 learning_rates = [0.001, 0.01, 0.1]
 nn_results = {}
 
 for rate in learning_rates:
-    W1, b1, W2, b2, losses = nn_model.train_nn(X_nn_norm, y_nn, hidden_size=8, lr=rate, epochs=500)
+    _, _, _, _, losses = nn_model.train_nn(
+        X_nn_norm, y_nn, hidden_size=8, lr=rate, epochs=500, verbose=False
+    )
     nn_results[rate] = losses
 
 # ---------- Plot 1: Regression line ----------
@@ -44,5 +51,14 @@ plt.xlabel("Epoch")
 plt.ylabel("MSE Loss")
 plt.legend()
 plt.savefig("nn_lr_comparison.png")
+
+# ---------- Plot 4: NN standalone loss curve (default lr) ----------
+plt.figure()
+plt.plot(nn_losses_default)
+plt.title("Neural Network Loss over Iterations (lr=0.01)")
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
+plt.savefig("nn_loss.png")
+
 
 plt.show()
